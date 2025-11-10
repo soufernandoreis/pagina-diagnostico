@@ -1,0 +1,119 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N1 Inteligência Digital — Diagnóstico Personalizado</title>
+  <meta name="description" content="Preencha o formulário e receba um diagnóstico personalizado para você ou para sua empresa.">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="font-serif text-2xl font-semibold text-teal-700">N1 Inteligência Digital</h1>
+      <a href="/" class="text-sm text-slate-600 hover:text-teal-700 transition">Voltar ao site</a>
+    </div>
+  </header>
+
+  <!-- Main Section -->
+  <main class="max-w-3xl mx-auto px-6 py-12">
+    <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-center text-slate-800">
+      Mentoria e Automação para quem quer crescer com Inteligência Digital
+    </h2>
+    <p class="mt-3 text-center text-slate-600">
+      Preencha o formulário. Nós entraremos em contato para realizar um diagnóstico personalizado para você ou para sua empresa.
+    </p>
+
+    <!-- Form Card -->
+    <div id="form-wrapper" class="bg-white rounded-2xl shadow-xl mt-10 p-8">
+      <form id="diagnostico-form" action="https://n8n-n8n-start.bgjw54.easypanel.host/webhook/fernandoreis" method="POST" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Nome*</label>
+          <input name="first_name" required class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Sobrenome*</label>
+          <input name="last_name" required class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Telefone*</label>
+          <input name="phone_number" type="tel" required placeholder="+55 (DDD) 99999-9999" class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700">E-mail corporativo*</label>
+          <input name="email" type="email" required class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Nome da empresa (opcional)</label>
+          <input name="company" class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-[#E6C47A] to-[#C89C3C] text-black font-semibold py-3 rounded-lg shadow hover:scale-[1.02] transition-all">
+          Enviar
+        </button>
+      </form>
+    </div>
+
+    <!-- Sucesso -->
+    <div id="success-msg" class="hidden text-center mt-10">
+      <h3 class="text-xl font-semibold text-teal-700">Recebemos seus dados!</h3>
+      <p class="mt-2 text-slate-700">Nossa equipe entrará em contato em breve para o seu diagnóstico personalizado.</p>
+      <div class="mt-4 flex justify-center gap-4">
+        <a href="/" class="px-4 py-2 bg-slate-900 text-white rounded-lg">Voltar ao site</a>
+        <a href="https://wa.me/5562982331156?text=Enviei%20meus%20dados%20para%20diagn%C3%B3stico" class="px-4 py-2 bg-teal-700 text-white rounded-lg">Falar no WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Erro -->
+    <div id="error-msg" class="hidden text-center mt-10">
+      <h3 class="text-xl font-semibold text-red-600">Ocorreu um erro no envio.</h3>
+      <p class="mt-2 text-slate-700">Tente novamente em alguns minutos.</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-16 border-t pt-6 text-center text-slate-600 text-sm">
+    © N1 Inteligência Digital — Todos os direitos reservados.<br>
+    Contato: <a href="mailto:fernando.nandoreis@gmail.com" class="underline">fernando.nandoreis@gmail.com</a>
+  </footer>
+
+  <!-- Script de envio via fetch -->
+  <script>
+  const form = document.getElementById('diagnostico-form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const payload = {
+        first_name: data.get('first_name') || '',
+        last_name: data.get('last_name') || '',
+        phone_number: data.get('phone_number') || '',
+        email: data.get('email') || '',
+        company: data.get('company') || '',
+        source: 'landing-n1-inteligencia-digital',
+        timestamp: new Date().toISOString()
+      };
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Erro no envio');
+        form.classList.add('hidden');
+        document.getElementById('success-msg').classList.remove('hidden');
+      } catch (err) {
+        document.getElementById('error-msg').classList.remove('hidden');
+      }
+    });
+  }
+  </script>
+</body>
+</html>

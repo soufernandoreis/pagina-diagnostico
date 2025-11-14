@@ -1,61 +1,107 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>N1 Inteligência Digital — Diagnóstico Personalizado</title>
-  <meta name="description" content="Preencha o formulário e receba um diagnóstico personalizado para você ou para sua empresa.">
+  <meta name="description" content="Preencha o formulário e receba um diagnóstico personalizado para você ou para sua empresa." />
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Fonte do sistema para performance; altere se quiser outra família */
+    :root { color-scheme: dark; }
+    /* --- Microanimação de entrada (card) --- */
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(14px) scale(.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    /* --- Brilho animado no botão (borda-aurora) --- */
+    @keyframes aurora {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    /* --- Efeito de “shine” varrendo o botão ao hover --- */
+    @keyframes sweep {
+      0% { transform: translateX(-120%); opacity: 0; }
+      50% { opacity: .7; }
+      100% { transform: translateX(120%); opacity: 0; }
+    }
+    .btn-glow {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,.35);
+    }
+    .btn-glow::before {
+      /* halo animado de fundo */
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 12px;
+      background:
+        radial-gradient(120px 120px at var(--x,50%) var(--y,50%),
+          rgba(29,233,182,.45), transparent 60%)
+        ,conic-gradient(from 0deg at 50% 50%,
+          #1DE9B6, #14CBA8, #19E2D7, #1DE9B6);
+      filter: blur(16px) saturate(1.2);
+      z-index: -1;
+      animation: aurora 6s linear infinite;
+      opacity: .7;
+    }
+    .btn-glow::after {
+      /* faixa de brilho que varre ao hover */
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 40%;
+      left: -40%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+      transform: translateX(-120%);
+      transition: transform .6s ease;
+      pointer-events: none;
+    }
+    .btn-glow:hover::after { animation: sweep .9s ease forwards; }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(29,233,182,.45); }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body class="min-h-screen bg-gradient-to-b from-[#0a0f0f] via-[#0e1414] to-[#0a0f0f] text-gray-100">
 
   <!-- Header -->
-  <header class="bg-white border-b border-slate-200">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="font-serif text-2xl font-semibold text-teal-700">N1 Inteligência Digital</h1>
-      <a href="/" class="text-sm text-slate-600 hover:text-teal-700 transition">Voltar ao site</a>
+  <header class="border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-semibold tracking-tight text-[#1DE9B6]">N1 Inteligência Digital</h1>
+      <a href="/" class="text-sm text-gray-400 hover:text-[#1DE9B6] transition">Voltar ao site</a>
     </div>
   </header>
 
-  <!-- Main Section -->
+  <!-- Main -->
   <main class="max-w-3xl mx-auto px-6 py-12">
-    <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-center text-slate-800">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center text-white">
       Mentoria e Automação para quem quer crescer com Inteligência Digital
     </h2>
-    <p class="mt-3 text-center text-slate-600">
-      Preencha o formulário. Nós entraremos em contato para realizar um diagnóstico personalizado para você ou para sua empresa.
+    <p class="mt-3 text-center text-gray-400">
+      Preencha o formulário. Entraremos em contato para realizar um diagnóstico personalizado para você ou para sua empresa.
     </p>
 
-    <!-- Form Card -->
-    <div id="form-wrapper" class="bg-white rounded-2xl shadow-xl mt-10 p-8">
-      <form id="diagnostico-form" action="https://n8n-n8n-start.bgjw54.easypanel.host/webhook/fernandoreis" method="POST" class="space-y-5">
-        <div>
-          <label class="block text-sm font-medium text-slate-700">Nome*</label>
-          <input name="first_name" required class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
-        </div>
+    <!-- Card do Formulário -->
+    <div class="bg-[#1c2424]/90 rounded-2xl border border-white/10 shadow-2xl mt-10 p-8 backdrop-blur-md"
+         style="animation: floatIn .6s cubic-bezier(.2,.8,.2,1) both;">
+      <form id="diagnostico-form"
+            action="https://n8n-n8n-start.bgjw54.easypanel.host/webhook/fernandoreis"
+            method="POST"
+            class="space-y-5">
+        <input name="first_name" placeholder="Nome*" required
+               class="w-full bg-transparent border border-white/20 rounded-lg p-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#1DE9B6] transition" />
+        <input name="last_name" placeholder="Sobrenome*" required
+               class="w-full bg-transparent border border-white/20 rounded-lg p-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#1DE9B6] transition" />
+        <input name="phone_number" type="tel" placeholder="+55 (DDD) 99999-9999" required
+               class="w-full bg-transparent border border-white/20 rounded-lg p-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#1DE9B6] transition" />
+        <input name="email" type="email" placeholder="E-mail corporativo*" required
+               class="w-full bg-transparent border border-white/20 rounded-lg p-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#1DE9B6] transition" />
+        <input name="company" placeholder="Nome da empresa (opcional)"
+               class="w-full bg-transparent border border-white/20 rounded-lg p-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#1DE9B6] transition" />
 
-        <div>
-          <label class="block text-sm font-medium text-slate-700">Sobrenome*</label>
-          <input name="last_name" required class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700">Telefone*</label>
-          <input name="phone_number" type="tel" required placeholder="+55 (DDD) 99999-9999" class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700">E-mail corporativo*</label>
-          <input name="email" type="email" required class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700">Nome da empresa (opcional)</label>
-          <input name="company" class="w-full border rounded-lg p-2 focus:ring-teal-400 focus:border-teal-400">
-        </div>
-
-        <button type="submit" class="w-full bg-gradient-to-r from-[#E6C47A] to-[#C89C3C] text-black font-semibold py-3 rounded-lg shadow hover:scale-[1.02] transition-all">
+        <button type="submit"
+                class="btn-glow focus-ring w-full relative rounded-lg px-5 py-3 font-semibold text-black bg-[#1DE9B6] hover:bg-[#14CBA8] transition-colors duration-300">
           Enviar
         </button>
       </form>
@@ -63,57 +109,72 @@
 
     <!-- Sucesso -->
     <div id="success-msg" class="hidden text-center mt-10">
-      <h3 class="text-xl font-semibold text-teal-700">Recebemos seus dados!</h3>
-      <p class="mt-2 text-slate-700">Nossa equipe entrará em contato em breve para o seu diagnóstico personalizado.</p>
+      <h3 class="text-xl font-semibold text-[#1DE9B6]">Recebemos seus dados!</h3>
+      <p class="mt-2 text-gray-300">Nossa equipe entrará em contato em breve para o seu diagnóstico personalizado.</p>
       <div class="mt-4 flex justify-center gap-4">
-        <a href="/" class="px-4 py-2 bg-slate-900 text-white rounded-lg">Voltar ao site</a>
-        <a href="https://wa.me/5562982331156?text=Enviei%20meus%20dados%20para%20diagn%C3%B3stico" class="px-4 py-2 bg-teal-700 text-white rounded-lg">Falar no WhatsApp</a>
+        <a href="/" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10 transition">Voltar ao site</a>
+        <a href="https://wa.me/5562982331156?text=Enviei%20meus%20dados%20para%20diagn%C3%B3stico"
+           class="px-4 py-2 rounded-lg bg-[#1DE9B6] text-black font-semibold hover:bg-[#14CBA8] transition">Falar no WhatsApp</a>
       </div>
     </div>
 
     <!-- Erro -->
     <div id="error-msg" class="hidden text-center mt-10">
-      <h3 class="text-xl font-semibold text-red-600">Ocorreu um erro no envio.</h3>
-      <p class="mt-2 text-slate-700">Tente novamente em alguns minutos.</p>
+      <h3 class="text-xl font-semibold text-red-400">Ocorreu um erro no envio.</h3>
+      <p class="mt-2 text-gray-300">Tente novamente em alguns minutos.</p>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="mt-16 border-t pt-6 text-center text-slate-600 text-sm">
-    © N1 Inteligência Digital — Todos os direitos reservados.<br>
-    Contato: <a href="mailto:fernando.nandoreis@gmail.com" class="underline">fernando.nandoreis@gmail.com</a>
+  <footer class="mt-16 text-center text-gray-500 text-sm border-t border-white/10 pt-6">
+    © N1 Inteligência Digital — Todos os direitos reservados.
   </footer>
 
-  <!-- Script de envio via fetch -->
+  <!-- Envio via fetch + pequeno efeito de hover que segue o mouse no botão -->
   <script>
-  const form = document.getElementById('diagnostico-form');
-  if (form) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      const payload = {
-        first_name: data.get('first_name') || '',
-        last_name: data.get('last_name') || '',
-        phone_number: data.get('phone_number') || '',
-        email: data.get('email') || '',
-        company: data.get('company') || '',
-        source: 'landing-n1-inteligencia-digital',
-        timestamp: new Date().toISOString()
-      };
-      try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) throw new Error('Erro no envio');
-        form.classList.add('hidden');
-        document.getElementById('success-msg').classList.remove('hidden');
-      } catch (err) {
-        document.getElementById('error-msg').classList.remove('hidden');
-      }
-    });
-  }
+    const form = document.getElementById('diagnostico-form');
+    const successMsg = document.getElementById('success-msg');
+    const errorMsg = document.getElementById('error-msg');
+    const btn = document.querySelector('.btn-glow');
+
+    // Efeito: o halo acompanha o mouse (custom property --x/--y)
+    if (btn) {
+      btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top) / r.height) * 100;
+        btn.style.setProperty('--x', x + '%');
+        btn.style.setProperty('--y', y + '%');
+      });
+    }
+
+    // Submissão assíncrona
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const payload = {
+          first_name: data.get('first_name') || '',
+          last_name: data.get('last_name') || '',
+          phone_number: data.get('phone_number') || '',
+          email: data.get('email') || '',
+          company: data.get('company') || '',
+          source: 'landing-n1-inteligencia-digital',
+          timestamp: new Date().toISOString()
+        };
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('Erro no envio');
+          form.parentElement.classList.add('hidden');
+          successMsg.classList.remove('hidden');
+        } catch (err) {
+          errorMsg.classList.remove('hidden');
+        }
+      });
+    }
   </script>
 </body>
 </html>
